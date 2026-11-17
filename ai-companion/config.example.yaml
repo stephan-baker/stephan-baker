@@ -1,0 +1,52 @@
+# Zkopíruj jako config.yaml a vyplň.
+
+discord:
+  token: "SEM_DEJ_BOT_TOKEN"
+  # Tvoje Discord user ID (Nastavení -> Pokročilé -> Vývojářský režim, pak pravým na sebe -> Kopírovat ID).
+  # Bot odpovídá JEN tomuhle ID a jen v DMs.
+  owner_id: 123456789012345678
+
+persona_file: "persona.yaml"
+
+llm:
+  ollama_url: "http://127.0.0.1:11434"
+  # Na 3080 Ti (12 GB) v pohodě: 8B–12B modely v Q4/Q5.
+  model: "mistral-nemo:12b"
+  temperature: 0.9
+  top_p: 0.95
+  num_ctx: 8192
+  # Kolik posledních zpráv posílat modelu jako kontext.
+  history_messages: 40
+
+images:
+  enabled: true
+  comfyui_url: "http://127.0.0.1:8188"
+  workflow_file: "workflow_sdxl.json"
+  # Název checkpointu přesně tak, jak ho vidíš v ComfyUI (models/checkpoints).
+  checkpoint: "sdxl_model.safetensors"
+  width: 832
+  height: 1216
+  steps: 28
+  cfg: 6.0
+  sampler: "dpmpp_2m"
+  scheduler: "karras"
+  # Pevný seed = konzistentnější obličej. -1 = náhodný.
+  seed: -1
+  # 12 GB nestačí na LLM + SDXL naráz -> před generováním se LLM vyhodí z VRAM
+  # a po generování se uvolní ComfyUI. Stojí to pár sekund, ale nepadá to na OOM.
+  swap_vram: true
+  timeout_seconds: 180
+
+behavior:
+  # Prodleva než "si přečte" zprávu (sekundy).
+  read_delay: [1.5, 6.0]
+  # Rychlost psaní (znaky za sekundu) – určuje, jak dlouho svítí "píše...".
+  typing_cps: [7, 14]
+  # Když pošleš víc zpráv rychle za sebou, počká a odpoví na všechny naráz.
+  debounce_seconds: 3.0
+  # Každý řádek odpovědi = samostatná zpráva.
+  split_lines: true
+  max_messages_per_reply: 4
+  # Pauza mezi jednotlivými zprávami (sekundy).
+  between_messages: [0.6, 2.2]
+  force_lowercase: true
